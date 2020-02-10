@@ -40,7 +40,7 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: dist
-        path: ${GITHUB_WORKSPACE}
+        path: .
     - run: |
         git add .
         git commit -m "Update Build Artefacts"
