@@ -29,7 +29,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: |
-        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*    
+        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+    - name: configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
     - run: |
         git checkout -b ${GITHUB_REF##*/}-dist
         git rm -rf .
@@ -40,3 +44,4 @@ jobs:
     - run: |
         git add .
         git commit -m "Update Build Artefacts"
+        git push --all origin
