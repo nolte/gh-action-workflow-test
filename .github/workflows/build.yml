@@ -16,7 +16,7 @@ jobs:
     - run: |
         mkdir -p ${HOME}/action_content
         cp action.yml ${HOME}/action_content/action.yml
-        cp dist ${HOME}/action_content/
+        cp -r dist ${HOME}/action_content/
     - name: upload the action content
       uses: actions/upload-artifact@v1
       with:
