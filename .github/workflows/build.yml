@@ -17,5 +17,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        ref: master-dist
+    - run: |
+        git checkout -b ${GITHUB_REF##*/}-dist
