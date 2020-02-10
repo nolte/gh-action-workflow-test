@@ -1,3 +1,8 @@
 vscode:
   extensions:
-   -  eamodio.gitlens
+   - eamodio.gitlens
+   - MarkLarah.pre-commit-vscode
+   - esbenp.prettier-vscode
+   - leizongmin.node-module-intellisense
+   - HookyQR.beautify
+   - KnisterPeter.vscode-github
