@@ -20,7 +20,7 @@ jobs:
     - name: upload the action content
       uses: actions/upload-artifact@v1
       with:
-        path: "${HOME}/action_content"
+        path: "${{env.HOME}}/action_content"
         name: "dist"
 
   publish:
