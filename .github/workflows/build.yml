@@ -13,6 +13,16 @@ jobs:
         node-version: 12.x
     - run: npm install
     - run: npm run package
+    - run: |
+        mkdir -p ${HOME}/action_content
+        cp action.yml ${HOME}/action_content/action.yml
+        cp dist ${HOME}/action_content/
+    - name: upload the action content
+      uses: actions/upload-artifact@v1
+      with:
+        path: "${HOME}/action_content"
+        name: "dist"
+
   publish:
     runs-on: ubuntu-latest
     steps:

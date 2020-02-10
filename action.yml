@@ -1,0 +1,5 @@
+name: gh-action-workflow-test
+description: Github Action Workflow Playground
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
