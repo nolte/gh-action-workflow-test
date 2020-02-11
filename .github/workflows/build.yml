@@ -35,7 +35,7 @@ jobs:
         string: 'Hello, world!'
         replace-with: 'I greet you, $1!'
     - run: echo "${{ toJson(github.event) }}"
-    - run: echo "${{ step.replace.outputs.replaced }}"
+    - run: echo "${{ steps.replace.outputs.replaced }}"
     - run: |
         git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
     - name: configure git
