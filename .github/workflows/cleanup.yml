@@ -12,4 +12,4 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
     - run: |
-        git push origin --delete ${GITHUB_REF##*/}-dist
+        git push origin --delete ${github.event.ref}-dist
