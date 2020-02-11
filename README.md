@@ -19,7 +19,7 @@ For Example, it exist a permanent ```develop``` Branch with the Source, after ch
 
 ## Releasing
 
-
+For the Release we use [c4urself/bump2version](https://github.com/c4urself/bump2version).
 
 ## Local build
 
