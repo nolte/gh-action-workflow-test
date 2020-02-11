@@ -1,9 +1,9 @@
-name: Build Github Action
+name: Branch Housekeeping
 on:
   delete
 
 jobs:
-  build:
+  clean:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
