@@ -31,9 +31,9 @@ jobs:
     - uses: frabert/replace-string-action@v1.1
       id: replace
       with:
-        pattern: 'Hello, (\w+)!'
-        string: 'Hello, world!'
-        replace-with: 'I greet you, $1!'
+        pattern: 'refs/heads/(\w+)'
+        string: "${{ github.event.ref }}"
+        replace-with: '$1-dist'
     - run: echo "${{ toJson(github.event) }}"
     - run: echo "${{ steps.replace.outputs.replaced }}"
     - run: |
