@@ -9,15 +9,13 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Read template from file
-      id: template
+      id: packagejson
       uses: traversals-analytics-and-intelligence/file-reader-action@master
       with:
         file: ./package.json
-    - name: Get the template output
-      run: echo "${{ steps.template.outputs.content }}"
-    - id: data
+    - id: packagejson_version
       uses: gr2m/get-json-paths-action@v1.x
       with:
-        json: ${{ steps.template.outputs.content }}
-        bar: "version"
-    - run: "echo bar is ${{ steps.data.outputs.bar }}"
+        json: ${{ steps.packagejson.outputs.content }}
+        version: "version"
+    - run: "echo bar is ${{ steps.packagejson_version.outputs.version }}"
