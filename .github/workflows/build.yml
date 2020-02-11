@@ -7,6 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: frabert/replace-string-action@v1.1
+      id: replace
+      with:
+        pattern: 'refs/heads/(\w+)'
+        string: "${{ github.event.ref }}"
+        replace-with: '$1-dist'
+    - run: echo "${{ github.event.ref }}"
+    - run: echo "${{ toJson(github.event) }}"
+    - run: echo "${{ steps.replace.outputs.replaced }}"
+
+
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
       with:
@@ -28,14 +39,7 @@ jobs:
     needs: build
     steps:
     - uses: actions/checkout@v2
-    - uses: frabert/replace-string-action@v1.1
-      id: replace
-      with:
-        pattern: 'refs/heads/(\w+)'
-        string: "${{ github.event.ref }}"
-        replace-with: '$1-dist'
-    - run: echo "${{ toJson(github.event) }}"
-    - run: echo "${{ steps.replace.outputs.replaced }}"
+
     - run: |
         git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
     - name: configure git
