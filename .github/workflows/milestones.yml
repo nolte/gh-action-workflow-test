@@ -36,7 +36,7 @@ jobs:
       - name: set release version
         uses: nolte/github-action/utils/bump2version@feature/shasum
         with:
-          currentVersion: " ${{ steps.packagejson_version.outputs.version }}"
+          currentVersion: "${{ steps.packagejson_version.outputs.version }}"
           part: release
 
       - name: Read template from file
@@ -48,7 +48,7 @@ jobs:
         uses: gr2m/get-json-paths-action@v1.x
         with:
           json: ${{ steps.packagejson_release.outputs.content }}
-          version: "version"
+          version: version
       - run: "echo bar is ${{ steps.packagejson_version_release.outputs.version }}"
 
 
@@ -63,10 +63,6 @@ jobs:
         with:
           currentVersion: "${{ steps.packagejson_version_release.outputs.version }}"
           part: minor
-
-      - name: load relase chart next develop version
-        id: chart_informations_next_dev
-        uses: nolte/github-action/helm/set_facts@feature/shasum
 
       - name: Read template from file
         id: packagejson_next_dev
