@@ -10,7 +10,7 @@ jobs:
     - uses: frabert/replace-string-action@v1.1
       id: replace
       with:
-        pattern: 'refs/heads/(\w+)'
+        pattern: 'refs\/heads\/(\w+)'
         string: "${{ github.event.ref }}"
         replace-with: '$1-dist'
     - run: echo "${{ github.event.ref }}"
