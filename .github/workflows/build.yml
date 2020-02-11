@@ -7,15 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: frabert/replace-string-action@v1.1
-      id: replace
-      with:
-        pattern: 'refs/heads/(.*)'
-        string: "${{ github.event.ref }}"
-        replace-with: '$1-dist'
-    - run: echo "${{ github.event.ref }}"
-    - run: echo "${{ toJson(github.event) }}"
-    - run: echo "${{ steps.replace.outputs.replaced }}"
+
 
 
     - name: Use Node.js 12.x
@@ -46,8 +38,15 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+    - uses: frabert/replace-string-action@v1.1
+      id: generate_branch_name
+      with:
+        pattern: 'refs/heads/(.*)'
+        string: "${{ github.event.ref }}"
+        replace-with: '$1-dist'
+
     - run: |
-        git checkout -b ${GITHUB_REF##*/}-dist
+        git checkout -b ${{ steps.generate_branch_name.outputs.replaced }}
         git rm -rf .
     - uses: actions/download-artifact@v1
       with:
@@ -56,4 +55,4 @@ jobs:
     - run: |
         git add .
         git commit -m "Update Build Artefacts"
-        git push origin ${GITHUB_REF##*/}-dist --force
+        git push origin ${{ steps.generate_branch_name.outputs.replaced }} --force
