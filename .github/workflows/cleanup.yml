@@ -17,6 +17,5 @@ jobs:
         pattern: 'refs/heads/(.*)'
         string: "${{ github.event.ref }}"
         replace-with: '$1-dist'
-
     - run: |
         git push origin --delete ${{ steps.generate_branch_name.outputs.replaced }}
