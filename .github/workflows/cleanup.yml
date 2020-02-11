@@ -1,0 +1,22 @@
+name: Branch Housekeeping
+on:
+  delete
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+    - uses: frabert/replace-string-action@v1.1
+      id: generate_branch_name
+      with:
+        pattern: 'refs/heads/(.*)'
+        string: "${{ github.event.ref }}"
+        replace-with: '$1-dist'
+
+    - run: |
+        git push origin --delete ${{ steps.generate_branch_name.outputs.replaced }}
