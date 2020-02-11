@@ -1,0 +1,204 @@
+name: Finished Release
+on:
+  milestone:
+    types: [closed]
+jobs:
+  build:
+    name: finish the release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
+      - name: configure git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Read template from file
+        id: packagejson
+        uses: traversals-analytics-and-intelligence/file-reader-action@master
+        with:
+          file: ./package.json
+      - id: packagejson_version
+        uses: gr2m/get-json-paths-action@v1.x
+        with:
+          json: ${{ steps.packagejson.outputs.content }}
+          version: "version"
+      - run: "echo bar is ${{ steps.packagejson_version.outputs.version }}"
+
+      - uses: actions/setup-python@v1
+      - name: set PY
+        run: echo "::set-env name=PY::$(python --version --version | sha256sum | cut -d' ' -f1)"
+
+      - name: set release version
+        uses: nolte/github-action/utils/bump2version@feature/shasum
+        with:
+          currentVersion: " ${{ steps.packagejson_version.outputs.version }}"
+          part: release
+
+      - name: Read template from file
+        id: packagejson_release
+        uses: traversals-analytics-and-intelligence/file-reader-action@master
+        with:
+          file: ./package.json
+      - id: packagejson_version_release
+        uses: gr2m/get-json-paths-action@v1.x
+        with:
+          json: ${{ steps.packagejson_release.outputs.content }}
+          version: "version"
+      - run: "echo bar is ${{ steps.packagejson_version_release.outputs.version }}"
+
+
+      - name: Commit files
+        run: |
+          git commit -m "Update to Release Version ${{ steps.packagejson_version_release.outputs.version }} close Milestone ${{ github.event.milestone.title }}" -a
+          git checkout -b release/rc-${{ steps.packagejson_version_release.outputs.version }}
+          git checkout develop
+
+      - name: update to next develop version
+        uses: nolte/github-action/utils/bump2version@feature/shasum
+        with:
+          currentVersion: "${{ steps.packagejson_version_release.outputs.version }}"
+          part: minor
+
+      - name: load relase chart next develop version
+        id: chart_informations_next_dev
+        uses: nolte/github-action/helm/set_facts@feature/shasum
+
+      - name: Read template from file
+        id: packagejson_next_dev
+        uses: traversals-analytics-and-intelligence/file-reader-action@master
+        with:
+          file: ./package.json
+      - id: packagejson_version_next_dev
+        uses: gr2m/get-json-paths-action@v1.x
+        with:
+          json: ${{ steps.packagejson_next_dev.outputs.content }}
+          version: "version"
+
+
+      - name: Commit files
+        run: |
+          git commit -m "Update to next Develop Version ${{ steps.packagejson_version_next_dev.outputs.version }}" -a
+          git push --all origin
+
+      - name: Initialize Pull Request
+        uses: nolte/github-action/utils/pullrequest@feature/shasum
+        id: pull_request_release_master
+        with:
+          pull_request_token: ${{ secrets.GITHUB_TOKEN }}
+          head: release/rc-${{ steps.packagejson_version_release.outputs.version }}
+          base: master
+          title: 'Update master to Latest Release ${{ steps.packagejson_version_release.outputs.version }}'
+          mileStoneNumber: "${{ github.event.milestone.number }}"
+          labels: "automerge, release"
+          body: >
+            This Pull for update the Presentation Master Branch.
+
+      - name: accept the pull request
+        uses: sudo-bot/action-pull-request-merge@v1.0.3
+        with:
+            args: "--trace"
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            number: ${{ steps.pull_request_release_master.outputs.pullRequestNumber }}
+            merge-method: merge
+            filter-label: automerge
+
+  creatghrelease:
+    name: generate relase items
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          ref: master
+
+      - name: Read template from file
+        id: packagejson
+        uses: traversals-analytics-and-intelligence/file-reader-action@master
+        with:
+          file: ./package.json
+      - id: packagejson_version
+        uses: gr2m/get-json-paths-action@v1.x
+        with:
+          json: ${{ steps.packagejson.outputs.content }}
+          version: "version"
+      - run: "echo bar is ${{ steps.packagejson_version.outputs.version }}"
+
+
+      - uses: actions/download-artifact@v1
+        with:
+          name: dist
+          path: .dist
+
+      - name: Create Release Notes
+        uses: docker://decathlon/release-notes-generator-action:2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_FOLDER: .dist/release_nodes
+          #USE_MILESTONE_TITLE: "false"
+      - name: read file output
+        run: ls -all .dist
+
+      - name: read file output
+        run: ls -all .dist/release_nodes
+
+      - uses: pCYSl5EDgo/cat@master
+        id: releasenodes
+        with:
+          path: .dist/release_nodes/release_file.md
+
+      - name: read file output
+        run: echo "${{ steps.releasenodes.outputs.text }}"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.packagejson_version.outputs.version }}
+          release_name: Release v${{ steps.packagejson_version.outputs.version }}
+          draft: false
+          prerelease: true
+          body: |
+            # Milestone Release
+
+            Release from Milestone [${{ github.event.milestone.title }}](${{ github.event.milestone.html_url }}).
+
+            ---
+            ${{ steps.releasenodes.outputs.text }}
+
+
+  newmilestone:
+    name: generate new milestone
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          ref: develop
+      - name: Read template from file
+        id: packagejson
+        uses: traversals-analytics-and-intelligence/file-reader-action@master
+        with:
+          file: ./package.json
+      - id: packagejson_version
+        uses: gr2m/get-json-paths-action@v1.x
+        with:
+          json: ${{ steps.packagejson.outputs.content }}
+          version: "version"
+      - run: "echo bar is ${{ steps.packagejson_version.outputs.version }}"
+      - name: Create Milestone
+        uses: "nolte/github-action-create-milestone@fix/parsing_title_with_version"
+        with:
+           title: "Release ${{ steps.packagejson_version.outputs.version }}"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
