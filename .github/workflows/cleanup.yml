@@ -1,0 +1,16 @@
+name: Branch Housekeeping
+on:
+  delete
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    if: endsWith(github.event.ref,'-dist') != true
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+    - run: |
+        git push origin --delete ${{ github.event.ref }}-dist

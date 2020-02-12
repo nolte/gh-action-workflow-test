@@ -1,5 +1,4 @@
 {
-    "version": "0.1.0-dev",
     "private": true,
     "dependencies": {
         "@actions/core": "^1.2.0",
