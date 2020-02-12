@@ -67,9 +67,9 @@ jobs:
         id: pull_request_release_master
         with:
           pull_request_token: ${{ secrets.GITHUB_TOKEN }}
-          head: release/rc-${{ steps.packagejson_next_dev.outputs.content }}
+          head: release/rc-${{ steps.packagejson_release.outputs.content }}
           base: master
-          title: 'Update master to Latest Release ${{ steps.packagejson_next_dev.outputs.content }}'
+          title: 'Update master to Latest Release ${{ steps.packagejson_release.outputs.content }}'
           mileStoneNumber: "${{ github.event.milestone.number }}"
           labels: "automerge, release"
           body: >
