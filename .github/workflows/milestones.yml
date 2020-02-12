@@ -101,11 +101,6 @@ jobs:
         with:
           file: ./version.txt
 
-      - uses: actions/download-artifact@v1
-        with:
-          name: dist
-          path: .dist
-
       - name: Create Release Notes
         uses: docker://decathlon/release-notes-generator-action:2.0.1
         env:
