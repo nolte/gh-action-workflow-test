@@ -30,7 +30,7 @@ jobs:
       - name: set release version
         uses: nolte/github-action/utils/bump2version@feature/shasum
         with:
-          currentVersion: "${ steps.packagejson.outputs.content }}"
+          currentVersion: "${{ steps.packagejson.outputs.content }}"
           part: release
 
       - name: Read template from file
