@@ -56,12 +56,6 @@ jobs:
         uses: traversals-analytics-and-intelligence/file-reader-action@master
         with:
           file: ./version.txt
-      - id: packagejson_version_next_dev
-        uses: gr2m/get-json-paths-action@v1.x
-        with:
-          json: ${{ steps.packagejson_next_dev.outputs.content }}
-          version: "version"
-
 
       - name: Commit files
         run: |
