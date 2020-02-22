@@ -208,7 +208,9 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-
+    - name: display ref git
+      run: |
+        echo "${{ github.event.ref }}"
     - uses: frabert/replace-string-action@v1.1
       id: generate_branch_name
       with:
