@@ -156,13 +156,13 @@ jobs:
 
       - name: set PY
         id: readfile
-        run: echo "::set-env RELEASEVERSION=$(cat ${{ env.HOME }}/release/version.txt)"
+        run: echo "::set-output name=release_version::$(cat ${{ env.HOME }}/release/version.txt)"
 
       - name: Check out code
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-          ref: tags/v${{ env.RELEASEVERSION }}
+          ref: tags/v${{ steps.readfile.outputs.release_version }}
 
       # generate the nodejs release dist content
       - name: Use Node.js 12.x
@@ -195,12 +195,12 @@ jobs:
         path: ${{ env.HOME }}/release
     - name: set PY
       id: readfile
-      run: echo "::set-env RELEASEVERSION=$(cat ${{ env.HOME }}/release/version.txt)"
+      run: echo "::set-output name=release_version::$(cat ${{ env.HOME }}/release/version.txt)"
     - name: Check out code
       uses: actions/checkout@v2
       with:
         fetch-depth: 1
-        ref: tags/v${{ env.RELEASEVERSION }}
+        ref: tags/v${{ steps.readfile.outputs.release_version }}
 
     - run: |
         git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
