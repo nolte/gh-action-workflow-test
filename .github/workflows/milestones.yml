@@ -203,7 +203,7 @@ jobs:
         ref: v${{ steps.readfile.outputs.release_version }}
 
     - run: |
-        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+        git fetch --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
     - name: configure git
       run: |
         git config --local user.email "action@github.com"
