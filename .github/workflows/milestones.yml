@@ -212,7 +212,7 @@ jobs:
     - uses: frabert/replace-string-action@v1.1
       id: generate_branch_name
       with:
-        pattern: 'refs/heads/(.*)'
+        pattern: 'refs/tags/(.*)'
         string: "${{ github.event.ref }}"
         replace-with: '$1-dist'
 
