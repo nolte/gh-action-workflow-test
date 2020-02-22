@@ -156,13 +156,13 @@ jobs:
 
       - name: set PY
         id: readfile
-        run: echo "::set-env release_version=$(cat ${{ env.HOME }}/release/version.txt)"
+        run: echo "::set-env RELEASEVERSION=$(cat ${{ env.HOME }}/release/version.txt)"
 
       - name: Check out code
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-          ref: tags/v${{ env.release_version }}
+          ref: tags/v${{ env.RELEASEVERSION }}
 
       # generate the nodejs release dist content
       - name: Use Node.js 12.x
@@ -185,7 +185,22 @@ jobs:
     runs-on: ubuntu-latest
     needs: createrealeasedist
     steps:
-    - uses: actions/checkout@v2
+
+    - run:   echo ::set-env name=HOME::$HOME
+      shell: bash
+    - name: Download math result for job 1
+      uses: actions/download-artifact@v1
+      with:
+        name: release_version
+        path: ${{ env.HOME }}/release
+    - name: set PY
+      id: readfile
+      run: echo "::set-env RELEASEVERSION=$(cat ${{ env.HOME }}/release/version.txt)"
+    - name: Check out code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        ref: tags/v${{ env.RELEASEVERSION }}
 
     - run: |
         git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
