@@ -2,10 +2,55 @@ name: Prepare a new Release
 on:
   create:
     branches:
-      - "pre-release/**"
+      - "release/rc-**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Read Pre Release Version from File
+      id: pre_release_version
+      uses: traversals-analytics-and-intelligence/file-reader-action@master
+      with:
+        file: ./version.txt
+
+    - uses: actions/setup-python@v1
+    - name: set PY
+      run: echo "::set-env name=PY::$(python --version --version | sha256sum | cut -d' ' -f1)"
+
+    - name: set release version
+      uses: nolte/github-action/utils/bump2version@feature/shasum
+      with:
+        currentVersion: "${{ steps.pre_release_version.outputs.content }}"
+        part: release
+
+    - name: Read Release Version from File
+      id: release_version
+      uses: traversals-analytics-and-intelligence/file-reader-action@master
+      with:
+        file: ./version.txt
+
+    - name: Commit files
+      run: |
+        git commit -m "Update to Release Version from ${{ steps.pre_release_version.outputs.content }} to ${{ steps.release_version.outputs.content }}" -a
+        git push --all origin
+
+    - name: Initialize Pull Request
+      uses: nolte/github-action/utils/pullrequest@feature/shasum
+      id: pull_request_release_master
+      with:
+        pull_request_token: ${{ secrets.GITHUB_TOKEN }}
+        head: release/rc-${{ steps.packagejson_release.outputs.content }}
+        base: master
+        title: 'Update master to Latest Release ${{ steps.release_version.outputs.content }}'
+        #mileStoneNumber: "${{ github.event.milestone.number }}"
+        labels: "automerge, release"
+        body: >
+          This Pull for update the Presentation Master Branch.

@@ -1,15 +1,12 @@
 name: Build Github Action
 on:
   push:
-    branches-ignore:
-      - "**-release/**"
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
-
 
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
