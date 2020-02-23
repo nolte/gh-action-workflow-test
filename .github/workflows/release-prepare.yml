@@ -47,7 +47,7 @@ jobs:
       id: pull_request_release_master
       with:
         pull_request_token: ${{ secrets.GITHUB_TOKEN }}
-        head: release/rc-${{ steps.packagejson_release.outputs.content }}
+        head: release/rc-v${{ steps.packagejson_release.outputs.content }}
         base: master
         title: 'Update master to Latest Release ${{ steps.release_version.outputs.content }}'
         #mileStoneNumber: "${{ github.event.milestone.number }}"
