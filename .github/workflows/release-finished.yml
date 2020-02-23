@@ -1,0 +1,21 @@
+name: Prepare a new Release
+on:
+  # https://help.github.com/en/actions/reference/events-that-trigger-workflows#pull-request-event-pull_request
+  pull_request:
+    types: [unlabeled]
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: accept the pull request
+        uses: sudo-bot/action-pull-request-merge@v1.0.3
+        if: github.event.label.name == 'automerge'
+        with:
+            args: "--trace"
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            number: ${{ github.event.number }}
+            merge-method: merge
+            filter-label: automerge
