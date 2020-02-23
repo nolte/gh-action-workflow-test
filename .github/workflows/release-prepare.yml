@@ -1,0 +1,11 @@
+name: Prepare a new Release
+on:
+  create:
+    branches:
+      - "pre-release/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2

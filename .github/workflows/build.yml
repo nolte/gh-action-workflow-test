@@ -1,7 +1,8 @@
 name: Build Github Action
 on:
   push:
-
+    branches-ignore:
+      - "**-release/**"
 jobs:
   build:
     runs-on: ubuntu-latest
