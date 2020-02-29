@@ -1,7 +1,11 @@
 name: Build Github Action
 on:
   push:
-
+    branches:
+      - "release/rc-**"
+      - "master"
+      - "develop"
+      - "release/**"
 jobs:
   build:
     runs-on: ubuntu-latest
