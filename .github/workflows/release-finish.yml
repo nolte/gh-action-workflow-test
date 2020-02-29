@@ -21,7 +21,7 @@ jobs:
 
     # https://github.com/actions/checkout#Fetch-all-branches
     - run: |
-        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+        git fetch --prune --unshallow
 
     - run: |
         git merge origin/master
