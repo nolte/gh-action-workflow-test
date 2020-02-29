@@ -24,7 +24,7 @@ jobs:
         git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
 
     - run: |
-        git rebase origin/master
+        git merge origin/master
 
     - name: Read Pre Release Version from File
       id: pre_release_version
