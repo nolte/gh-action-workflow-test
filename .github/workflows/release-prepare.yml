@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: startsWith( github.event.ref,'release/rc-')
     steps:
     - uses: actions/checkout@v2
 
