@@ -18,7 +18,7 @@ jobs:
         github-token: ${{secrets.GITHUB_TOKEN}}
         result-encoding: string
         script: |
-          const releases = github.repos.getLatestRelease({
+          const releases =  await github.repos.getLatestRelease({
             owner: context.repo.owner,
             repo: context.repo.repo
           })
