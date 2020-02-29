@@ -15,5 +15,5 @@ jobs:
       uses: nolte/github-action/utils/changeLog@feature/shasum
       with:
         CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        CHANGELOG_GITHUB_PROJECT: ${{ GITHUB_REPOSITORY }}
+        CHANGELOG_GITHUB_PROJECT: ${{ env.GITHUB_REPOSITORY }}
         CHANGELOG_GITHUB_SINCE_TAG: "v0.21.0"
