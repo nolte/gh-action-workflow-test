@@ -2,7 +2,7 @@ name: Build Github Action
 on:
   push:
     branches:
-      - "release/rc-**"
+      #- "release/rc-**"
       - "master"
       - "develop"
       - "release/**"
