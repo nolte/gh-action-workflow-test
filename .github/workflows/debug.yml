@@ -16,13 +16,15 @@ jobs:
       id: latest_release
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
-        result-encoding: string
+        #result-encoding: string
         script: |
           const releases =  await github.repos.getLatestRelease({
             owner: context.repo.owner,
             repo: context.repo.repo
           })
-          return releases.name
+          return releases
+    - run: |
+        echo "${{ steps.latest_release.outputs.result }}"
     - name: Create changelog
       uses: nolte/github-action/utils/changeLog@feature/shasum
       with:
