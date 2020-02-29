@@ -22,7 +22,7 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo
           })
-          return releases.data.name
+          return releases
     - name: Create changelog
       uses: nolte/github-action/utils/changeLog@feature/shasum
       with:
