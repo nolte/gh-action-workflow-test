@@ -1,0 +1,40 @@
+name: Prepare a new Release
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - "master"
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: mkdir -p .dist
+    - name: Create Release Notes
+      uses: docker://decathlon/release-notes-generator-action:2.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OUTPUT_FOLDER: .dist/release_nodes
+    - uses: pCYSl5EDgo/cat@master
+      id: releasenodes
+      with:
+        path: .dist/release_nodes/release_file.md
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.packagejson.outputs.content  }}
+        release_name: Release v${{ steps.packagejson.outputs.content }}
+        draft: true
+        prerelease: true
+        body: |
+          # Milestone Release
+          Release from Milestone [${{ github.event.milestone.title }}](${{ github.event.milestone.html_url }}).
+
+          ---
+          ${{ steps.releasenodes.outputs.text }}
