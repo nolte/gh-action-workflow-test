@@ -18,3 +18,11 @@ jobs:
         CHANGELOG_GITHUB_PROJECT: "gh-action-workflow-test"
         CHANGELOG_GITHUB_SINCE_TAG: "v0.21.0"
         CHANGELOG_GITHUB_USER: "nolte"
+
+    - name: Read Pre Release Version from File
+      id: pre_release_version
+      uses: traversals-analytics-and-intelligence/file-reader-action@master
+      with:
+        file: /github/workspace/CHANGELOG.md
+    - run: |
+        echo "${{ steps.pre_release_version.outputs.content }}"
