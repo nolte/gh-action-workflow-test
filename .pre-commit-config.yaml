@@ -7,10 +7,15 @@ repos:
         exclude: |
             (?x)(
                 .md|
-                .bumpversion.cfg
+                .bumpversion.cfg|
+                version.txt
             )
       - id: end-of-file-fixer
-        exclude: ".bumpversion.cfg"
+        exclude: |
+            (?x)(
+                .bumpversion.cfg|
+                version.txt
+            )
   - repo: https://github.com/gruntwork-io/pre-commit
     rev: v0.1.1
     hooks:
