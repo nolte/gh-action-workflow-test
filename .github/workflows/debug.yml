@@ -11,12 +11,24 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+
+    - uses: actions/github-script@0.8.0
+      id: latest_release
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        result-encoding: string
+        script: |
+          const releases = github.repos.getLatestRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
+          return releases.name
     - name: Create changelog
       uses: nolte/github-action/utils/changeLog@feature/shasum
       with:
         CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CHANGELOG_GITHUB_PROJECT: "${{ github.event.repository.name }}"
-        CHANGELOG_GITHUB_SINCE_TAG: "v0.21.0"
+        CHANGELOG_GITHUB_SINCE_TAG: "${{ steps.latest_release.outputs.result }}"
         CHANGELOG_GITHUB_USER: "${{ github.event.repository.owner.login }}"
 
     - name: Read Pre Release Version from File
