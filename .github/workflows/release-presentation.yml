@@ -25,7 +25,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        #tag_name: v${{ steps.packagejson.outputs.content  }}
+        tag_name: v${{ steps.packagejson.outputs.content  }}
         release_name: Release v${{ steps.packagejson.outputs.content }}
         draft: true
         prerelease: true
