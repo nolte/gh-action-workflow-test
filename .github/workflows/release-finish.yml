@@ -6,7 +6,7 @@ on:
       - "master"
 
 jobs:
-  updatenextdev:
+  update_to_next_develop:
     name: Prepare Next Develop Version
     runs-on: ubuntu-latest
     steps:
