@@ -1,0 +1,19 @@
+name: Debug Workflow
+on:
+  issues:
+    types:
+      - labeled
+      - unlabeled
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create changelog
+      uses: nolte/github-action/utils/changeLog@feature/shasum
+      with:
+        CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CHANGELOG_GITHUB_PROJECT: ${{ GITHUB_REPOSITORY }}
+        CHANGELOG_GITHUB_SINCE_TAG: "v0.21.0"
