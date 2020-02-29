@@ -55,7 +55,6 @@ jobs:
 
 
     - uses: actions/github-script@0.4.0
-      if: startsWith(github.head_ref,'fix') == true
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
