@@ -44,9 +44,9 @@ jobs:
     - uses: frabert/replace-string-action@v1.1
       id: generate_branch_name
       with:
-        pattern: 'refs/heads/(.*)'
+        pattern: 'refs/(.*)/(.*)'
         string: "${{ github.event.ref }}"
-        replace-with: '$1-dist'
+        replace-with: '$2-dist'
 
     - run: |
         git checkout -b ${{ steps.generate_branch_name.outputs.replaced }}
