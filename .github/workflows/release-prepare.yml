@@ -44,6 +44,17 @@ jobs:
         git commit -m "Update to Release Version from ${{ steps.pre_release_version.outputs.content }} to ${{ steps.release_version.outputs.content }}" -a
         git push --all origin
 
+    - uses: actions/github-script@0.4.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.issues.addLabels({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: ['automerge']
+          })
+
     #- name: Initialize Pull Request
     #  uses: nolte/github-action/utils/pullrequest@feature/shasum
     #  id: pull_request_release_master
