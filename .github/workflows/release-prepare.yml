@@ -1,11 +1,9 @@
 name: Prepare a new Release
 on:
   create:
-    branches:
-      - "release/rc-**"
 
 jobs:
-  build:
+  update_to_release:
     runs-on: ubuntu-latest
     if: startsWith( github.event.ref,'release/rc-')
     steps:
@@ -51,7 +49,6 @@ jobs:
         head: release/rc-v${{ steps.release_version.outputs.content }}
         base: master
         title: 'Update master to Latest Release ${{ steps.release_version.outputs.content }}'
-        #mileStoneNumber: "${{ github.event.milestone.number }}"
         labels: "automerge, release"
         body: >
           This Pull for update the Presentation Master Branch.
