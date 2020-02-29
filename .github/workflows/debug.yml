@@ -15,9 +15,9 @@ jobs:
       uses: nolte/github-action/utils/changeLog@feature/shasum
       with:
         CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        CHANGELOG_GITHUB_PROJECT: "gh-action-workflow-test"
+        CHANGELOG_GITHUB_PROJECT: "${{ github.repo.repo }}"
         CHANGELOG_GITHUB_SINCE_TAG: "v0.21.0"
-        CHANGELOG_GITHUB_USER: "nolte"
+        CHANGELOG_GITHUB_USER: "${{ github.repo.owner }}"
 
     - name: Read Pre Release Version from File
       id: pre_release_version
