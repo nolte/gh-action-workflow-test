@@ -8,7 +8,7 @@ on:
 jobs:
   update_to_release:
     runs-on: ubuntu-latest
-    if: startsWith( github.event.ref,'release/rc-')
+    if: startsWith( github.event.head.ref,'release/rc-')
     steps:
     - uses: actions/checkout@v2
 
