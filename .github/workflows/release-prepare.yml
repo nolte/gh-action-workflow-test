@@ -54,3 +54,10 @@ jobs:
         labels: "automerge, release"
         body: >
           This Pull for update the Presentation Master Branch.
+
+    - name: update deploy status
+      if: always()
+      uses: unacast/actions-github-deployment-status@0.2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
