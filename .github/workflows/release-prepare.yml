@@ -1,6 +1,9 @@
 name: Prepare a new Release
 on:
-  create:
+  pull_request:
+    types: [opened]
+    branches:
+      - "master"
 
 jobs:
   update_to_release:
@@ -41,14 +44,14 @@ jobs:
         git commit -m "Update to Release Version from ${{ steps.pre_release_version.outputs.content }} to ${{ steps.release_version.outputs.content }}" -a
         git push --all origin
 
-    - name: Initialize Pull Request
-      uses: nolte/github-action/utils/pullrequest@feature/shasum
-      id: pull_request_release_master
-      with:
-        pull_request_token: ${{ secrets.GITHUB_TOKEN }}
-        head: release/rc-v${{ steps.release_version.outputs.content }}
-        base: master
-        title: 'Update master to Latest Release ${{ steps.release_version.outputs.content }}'
-        labels: "automerge, release"
-        body: >
-          This Pull for update the Presentation Master Branch.
+    #- name: Initialize Pull Request
+    #  uses: nolte/github-action/utils/pullrequest@feature/shasum
+    #  id: pull_request_release_master
+    #  with:
+    #    pull_request_token: ${{ secrets.GITHUB_TOKEN }}
+    #    head: release/rc-v${{ steps.release_version.outputs.content }}
+    #    base: master
+    #    title: 'Update master to Latest Release ${{ steps.release_version.outputs.content }}'
+    #    labels: "automerge, release"
+    #    body: >
+    #      This Pull for update the Presentation Master Branch.
