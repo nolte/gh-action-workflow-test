@@ -52,3 +52,16 @@ jobs:
       run: |
         git commit -m "Update to the next Dev Version ${{ steps.release_version.outputs.content }}" -a
         git push --all origin
+
+
+    - uses: actions/github-script@0.4.0
+      if: startsWith(github.head_ref,'fix') == true
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.issues.addLabels({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: ['release']
+          })
